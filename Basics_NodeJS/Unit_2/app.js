@@ -1,5 +1,5 @@
 const express = require('express');
-
+const morgan = require('morgan'); //for middleware
 // express app
 const app = express();
 
@@ -7,9 +7,26 @@ const app = express();
 //app.set('views', './views/');
 app.set('view engine', 'ejs');
 
-
 //listen for requests
 app.listen(3000);
+
+/*
+app.use((req, res) => {
+  console.log('New request made: ');
+  console.log('host', req.hostname);
+  console.log('path', req.path);
+  console.log('method', req.method);
+  next();
+})
+
+app.use((req, res) => {
+  console.log('In the next middleware');
+})
+*/
+
+// middleware and static files
+app.use(express.static('public')); //any file inside 'public' will be public xD
+app.use(morgan('dev'));
 
 app.get('/', (req, res) => {
     const blogs = [
