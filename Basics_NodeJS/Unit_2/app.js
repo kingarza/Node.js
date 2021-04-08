@@ -3,6 +3,9 @@ const morgan = require('morgan'); //for middleware
 // express app
 const app = express();
 
+// connect to MongoDB
+const dbURI = 'mongodb+srv://luisGarza:<holamundo>@nodetuts.i5aug.mongodb.net/myFirstDatabase?retryWrites=true&w=majority';
+
 //register view engine
 //app.set('views', './views/');
 app.set('view engine', 'ejs');
