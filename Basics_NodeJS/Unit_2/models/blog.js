@@ -16,5 +16,5 @@ const blogSchema = new Schema({
     }
 }, { timestamps : true });
 
-const Blog = moongose.model('Blog', blogSchema)
-module.export = Blog;
+const Blog = moongose.model('Blog', blogSchema);
+module.exports = Blog;
