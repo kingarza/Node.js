@@ -35,7 +35,10 @@ app.use((req, res) => {
 app.use(express.static('public')); //any file inside 'public' will be public xD
 app.use(morgan('dev'));
 
-// mongoose and mongo sandbox routes
+/*
+
+Interacting with moongoose and mongo sandbox routes
+
 app.get('/add-blog', (req, res) => {
   const blog = new Blog({
     title : 'new blog 2',
@@ -72,18 +75,26 @@ app.get('/single-blog', (req, res) => {
     })
 })
 
+*/
 
 app.get('/', (req, res) => {
-    const blogs = [
-      {title: 'Yoshi finds eggs', snippet: 'Lorem ipsum dolor sit amet consectetur'},
-      {title: 'Mario finds stars', snippet: 'Lorem ipsum dolor sit amet consectetur'},
-      {title: 'How to defeat bowser', snippet: 'Lorem ipsum dolor sit amet consectetur'},
-    ];
-    res.render('index', { title: 'Home', blogs : blogs });
+  res.redirect('/blogs');
 });
 
 app.get('/about', (req, res) => {
 res.render('about', { title: 'About' });
+});
+
+// blog routes
+
+app.get('/blogs', (req, res) => {
+  Blog.find() //asincrono
+    .then((result) => {
+      res.render('index', { title : 'All Blogs', blogs : result })
+    })
+    .catch((err) => {
+      console.log(err);
+    })
 });
 
 app.get('/blogs/create', (req, res) => {
