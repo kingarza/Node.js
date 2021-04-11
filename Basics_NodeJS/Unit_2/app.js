@@ -1,7 +1,8 @@
 const express = require('express');
 const morgan = require('morgan'); //for middleware
 const mongoose = require('mongoose'); //data base
-const Blog = require('./models/blog')
+const Blog = require('./models/blog');
+const { baseModelName } = require('./models/blog');
 
 // express app
 const app = express();
@@ -33,6 +34,7 @@ app.use((req, res) => {
 
 // middleware and static files
 app.use(express.static('public')); //any file inside 'public' will be public xD
+app.use(express.urlencoded({ extended : true }));
 app.use(morgan('dev'));
 
 /*
@@ -96,6 +98,31 @@ app.get('/blogs', (req, res) => {
       console.log(err);
     })
 });
+
+app.post('/blogs', (req, res) => {
+  //to avoid undefined, we use middleware: app.use(express.urlencoded({ extended : true }));
+  const blog = new Blog(req.body);
+  blog.save()
+    .then((result) => {
+      res.redirect('/blogs');
+    })
+    .catch((err) => {
+      console.log(err);
+    })
+})
+
+app.get('/blogs/:id', (req, res) => {
+  //to avoid undefined, we use middleware: app.use(express.urlencoded({ extended : true }));
+  const id = req.params.id;
+  Blog.findById(id)
+    .then((result) => {
+      res.render('details', { blog : result, title : 'Blog Details' });
+    })
+    .catch((err) => {
+      console.log(err);
+    })
+})
+
 
 app.get('/blogs/create', (req, res) => {
 res.render('create', { title: 'Create a new blog' });
