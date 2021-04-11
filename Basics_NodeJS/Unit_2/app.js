@@ -1,8 +1,6 @@
 const express = require('express');
 const morgan = require('morgan'); //for middleware
 const mongoose = require('mongoose'); //data base
-//const Blog = require('./models/blog');
-//const { baseModelName } = require('./models/blog');
 const  blogRoutes = require('./routes/blogRoutes');
 
 // express app
