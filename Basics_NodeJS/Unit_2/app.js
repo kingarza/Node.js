@@ -123,6 +123,19 @@ app.get('/blogs/:id', (req, res) => {
     })
 })
 
+//delete
+app.delete('/blogs/:id', (req, res) => {
+  //to avoid undefined, we use middleware: app.use(express.urlencoded({ extended : true }));
+  const id = req.params.id;
+  Blog.findByIdAndDelete(id)
+    .then((result) => {
+      res.json({ redirect : '/blogs'});
+    })
+    .catch((err) => {
+      console.log(err);
+    })
+})
+
 
 app.get('/blogs/create', (req, res) => {
 res.render('create', { title: 'Create a new blog' });
