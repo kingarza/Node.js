@@ -1,31 +1,40 @@
 const express = require('express');
+const morgan = require('morgan'); //for middleware
+const mongoose = require('mongoose'); //data base
+const  blogRoutes = require('./routes/blogRoutes');
 
 // express app
 const app = express();
 
-//register view engine
-app.set('view engine', 'ejs');
-app.set('view engine', 'myviews');
-
+// connect to MongoDB
+const dbURI = 'mongodb+srv://luisGarza:holamundo@nodetuts.i5aug.mongodb.net/note-tuts?retryWrites=true&w=majority';
+mongoose.connect(dbURI, { useNewUrlParser : true, useUnifiedTopology : true })
 //listen for requests
-app.listen(3000);
+  .then((result) => app.listen(4001))
+  .catch((err) => console.log(err))
+
+//register view engine
+//app.set('views', './views/');
+app.set('view engine', 'ejs');
+
+// middleware and static files
+app.use(express.static('public')); //any file inside 'public' will be public xD
+app.use(express.urlencoded({ extended : true }));
+app.use(morgan('dev'));
 
 app.get('/', (req, res) => {
-    // we specify the relative root with the 2nd parameter
-    res.sendFile('./views/index.html', { root : __dirname });
-})
+  res.redirect('/blogs');
+});
 
 app.get('/about', (req, res) => {
-    res.sendFile('./views/about.html', { root : __dirname });
-})
+res.render('about', { title: 'About' });
+});
 
-// redirects
-app.get('/about-us', (req, res) => {
-    res.redirect('/about');
-})
+//blog routes
+app.use(blogRoutes)
 
 //404 page
 // default case, This function is executed if none of the above functions worked
 app.use((req, res) => {
-    res.status(404).sendFile('./views/404.html', { root : __dirname })
+    res.status(404).render('404', { title: '404'});
 })
